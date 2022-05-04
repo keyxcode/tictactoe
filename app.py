@@ -7,7 +7,9 @@ app = Flask(__name__)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 Session(app)
+
 
 @app.route("/")
 def index():
@@ -18,7 +20,15 @@ def index():
 
     return render_template("game.html", game=session["board"], turn=session["turn"])
 
+
 @app.route("/play/<int:row>/<int:col>")
 def play(row, col):
     
+    session["board"][row][col] = session["turn"]
+    
+    if session["turn"] == "X":
+        session["turn"] = "O"
+    else:
+        session["turn"] = "X"
+        
     return redirect("/")
