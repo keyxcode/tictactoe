@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Tic Tac Toe</title>
-        <link href="/static/styles.css" rel="stylesheet">
-    </head>
-    <body>
-        <div>
-            {% if turn %}
-            <h1>Winner is {{ turn }}</h1>
+{% extends "layout.html" %}
+
+{% block body %}
+    {% if turn %}
+    <h1>Winner is {{ turn }}</h1>
+    {% else %}
+    <h1> It's a draw!</h1>
+    {% endif %}
+    <table>
+        {% for i in range(3) %}
+        <tr>
+            {% for j in range(3) %}
+            {% if game[i][j] %}
+            <td>{{ game[i][j] }}</td>
             {% else %}
-            <h1> It's a draw!</h1>
+            <td></td>
             {% endif %}
-            <table>
-                {% for i in range(3) %}
-                <tr>
-                    {% for j in range(3) %}
-                    {% if game[i][j] %}
-                    <td>{{ game[i][j] }}</td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </table>
-            <br>
-            <a href="/reset">Reset</a>
-        </div>
-    </body>
-</html>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
