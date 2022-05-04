@@ -33,7 +33,7 @@ def play(row, col):
             if session["board"][i][0] == session["board"][i][1] == session["board"][i][2] != None or \
                session["board"][0][j] == session["board"][1][j] == session["board"][2][j] != None or \
                session["board"][0][0] == session["board"][1][1] == session["board"][2][2] != None or\
-               session["board"][2][2] == session["board"][1][1] == session["board"][0][0] != None:
+               session["board"][2][0] == session["board"][1][1] == session["board"][0][2] != None:
                return render_template("winner.html", game=session["board"], turn=session["turn"])
 
     # Draw Logic
