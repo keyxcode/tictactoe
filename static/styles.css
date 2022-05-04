@@ -1,0 +1,26 @@
+html {
+    font-family: Helvetica, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+td {
+    border: 1px solid black;
+    width: 150px;
+    height: 150px;
+    font-size: 50px;
+    text-align: center;
+}
+
+td> a {
+    font-size: 18px;
+    text-decoration: None;
+    color: blue;
+}
+
+div {
+    text-align: center;
+}
