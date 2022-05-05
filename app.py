@@ -10,30 +10,30 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 Session(app)
 
-
+#======================================================================
 @app.route("/")
 def index():
 
+    # Initialize gameboard, turn and undo manager
     if "board" not in session:
         session["board"] = [[None, None, None], [None, None, None], [None, None, None]]
         session["turn"] = "X"
-
-    if "undo" not in session:
         session["undo"] = []
 
     return render_template("game.html", game=session["board"], turn=session["turn"], undo=session["undo"])
 
 
+#======================================================================
 @app.route("/play/<int:row>/<int:col>")
 def play(row, col):
     
     # Play a move
     session["board"][row][col] = session["turn"]
 
-    # Store in undo manager
+    # Store the last move in undo manager
     session["undo"].append([row, col])
 
-    # Winning Logic
+    # If someone wins -> Winning Logic
     for i in range(3):
         for j in range(3):
             if session["board"][i][0] == session["board"][i][1] == session["board"][i][2] != None or \
@@ -42,7 +42,7 @@ def play(row, col):
                session["board"][2][0] == session["board"][1][1] == session["board"][0][2] != None:
                return render_template("winner.html", game=session["board"], turn=session["turn"])
 
-    # Draw Logic
+    # If it's a draw -> Draw Logic
     draw = True
     for i in range(3):
         for j in range(3):
@@ -54,7 +54,7 @@ def play(row, col):
     if draw == True:
         return render_template("winner.html", game=session["board"])
 
-    # Switch turn
+    # If no one wins yet -> Switch turn
     if session["turn"] == "X":
         session["turn"] = "O"
     else:
@@ -63,6 +63,7 @@ def play(row, col):
     return redirect("/")
 
 
+#======================================================================
 @app.route("/reset")
 def reset():
 
@@ -77,6 +78,8 @@ def reset():
     
     return redirect("/")
 
+
+#======================================================================
 @app.route("/undo")
 def undo():
 
@@ -90,5 +93,11 @@ def undo():
 
         # Remove the last move in the undo manager
         session["undo"].pop()
+
+        # Revert play turn
+        if session["turn"] == "X":
+            session["turn"] = "O"
+        else:
+            session["turn"] = "X"
     
     return redirect("/")
