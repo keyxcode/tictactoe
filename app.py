@@ -18,7 +18,10 @@ def index():
         session["board"] = [[None, None, None], [None, None, None], [None, None, None]]
         session["turn"] = "X"
 
-    return render_template("game.html", game=session["board"], turn=session["turn"])
+    if "undo" not in session:
+        session["undo"] = []
+
+    return render_template("game.html", game=session["board"], turn=session["turn"], undo=session["undo"])
 
 
 @app.route("/play/<int:row>/<int:col>")
@@ -26,6 +29,9 @@ def play(row, col):
     
     # Play a move
     session["board"][row][col] = session["turn"]
+
+    # Store in undo manager
+    session["undo"].append([row, col])
 
     # Winning Logic
     for i in range(3):
@@ -65,5 +71,24 @@ def reset():
     
     # Reset turn
     session["turn"] = "X"
+
+    # Reset undo manager
+    session["undo"] = []
+    
+    return redirect("/")
+
+@app.route("/undo")
+def undo():
+
+    # Undo a move
+    if len(session["undo"]) > 0:
+        lastMove = len(session["undo"]) - 1
+        row = session["undo"][lastMove][0]
+        col = session["undo"][lastMove][1]
+
+        session["board"][row][col] = None
+
+        # Remove the last move in the undo manager
+        session["undo"].pop()
     
     return redirect("/")

@@ -9,7 +9,14 @@
             {% block body %}
             {% endblock %}
             <br>
-            <a href="/reset">Reset</a>
+            <div>
+                <a href="/reset">Reset</a>
+            </div>
+            {% if undo %}
+            <div>
+                <a href="/undo">Undo</a>
+            </div>
+            {% endif %}
         </div>
     </body>
 </html>
